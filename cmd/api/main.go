@@ -4,17 +4,18 @@ import (
 	"net/http"
 
 	"github.com/zishone/go-notes-service/cmd/api/routes"
+	"github.com/zishone/go-notes-service/internal/platform/configurations"
 )
 
-// PORT : Port that the service will listen and serve
-const PORT = ":3000"
-
 func main() {
+	c := configurations.New()
+
 	r := routes.New()
 	r.ComposeMiddlewares()
 	r.ConfigureRoutes()
+	r.WalkRoutes()
 
-	err := http.ListenAndServe(PORT, r.Mux())
+	err := http.ListenAndServe(c.Port(), r.Mux())
 	if err != nil {
 		panic(err)
 	}
