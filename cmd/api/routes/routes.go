@@ -13,10 +13,9 @@ type Router struct {
 
 // New : Instantiates the router
 func New() Router {
-	r := Router{
+	return Router{
 		mux: chi.NewRouter(),
 	}
-	return r
 }
 
 // Mux : Getter for mux
@@ -26,7 +25,10 @@ func (r Router) Mux() *chi.Mux {
 
 // ComposeMiddlewares : Composes global middlewares
 func (r Router) ComposeMiddlewares() {
+	r.mux.Use(middleware.RequestID)
+	r.mux.Use(middleware.RealIP)
 	r.mux.Use(middleware.Logger)
+	r.mux.Use(middleware.Recoverer)
 }
 
 // ConfigureRoutes : Configure api routes
