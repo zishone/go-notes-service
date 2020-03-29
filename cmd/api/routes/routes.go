@@ -6,10 +6,30 @@ import (
 	"github.com/zishone/go-notes-service/cmd/api/handlers"
 )
 
-// Init : Initializes the api routes
-func Init() *chi.Mux {
-	r := chi.NewRouter()
-	r.Use(middleware.Logger)
-	r.Get("/notes", handlers.GetNotes)
+// Router : A struct that will hold the mux
+type Router struct {
+	mux *chi.Mux
+}
+
+// New : Instantiates the router
+func New() Router {
+	r := Router{
+		mux: chi.NewRouter(),
+	}
 	return r
+}
+
+// Mux : Getter for mux
+func (r Router) Mux() *chi.Mux {
+	return r.mux
+}
+
+// ComposeMiddlewares : Composes global middlewares
+func (r Router) ComposeMiddlewares() {
+	r.mux.Use(middleware.Logger)
+}
+
+// ConfigureRoutes : Configure api routes
+func (r Router) ConfigureRoutes() {
+	r.mux.Get("/notes", handlers.GetNotes)
 }
