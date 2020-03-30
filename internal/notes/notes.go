@@ -15,3 +15,9 @@ var notes = Notes{
 func FetchNotes() (Notes, error) {
 	return notes, nil
 }
+
+// AddNote : Adds a note
+func AddNote(note Note) error {
+	notes = append(notes, note)
+	return nil
+}
