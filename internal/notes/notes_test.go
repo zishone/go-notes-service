@@ -49,3 +49,14 @@ func TestUpdateNote(t *testing.T) {
 		t.Errorf("Expected fails length to be 0, but got %v", len(fails))
 	}
 }
+
+func TestDeleteNote(t *testing.T) {
+	title := "First"
+	_, fails, err := notes.DeleteNote(title)
+	if err != nil {
+		t.Errorf("Expected error to be not nil, but got %v", err)
+	}
+	if len(fails) != 0 {
+		t.Errorf("Expected fails length to be 0, but got %v", len(fails))
+	}
+}

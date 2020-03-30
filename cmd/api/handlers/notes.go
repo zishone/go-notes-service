@@ -62,3 +62,16 @@ func UpdateNoteV1(w http.ResponseWriter, r *http.Request) {
 
 	helpers.NewResponse(note, fails, errs).Send(w)
 }
+
+// DeleteNoteV1 : Handles DELETE /v1/notes/{title} call
+func DeleteNoteV1(w http.ResponseWriter, r *http.Request) {
+	errs := []error{}
+	title := chi.URLParam(r, "title")
+
+	note, fails, err := notes.DeleteNote(title)
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	helpers.NewResponse(note, fails, errs).Send(w)
+}
