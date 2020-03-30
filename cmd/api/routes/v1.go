@@ -10,7 +10,7 @@ func v1(r chi.Router) {
 		r.Get("/", handlers.FetchNotesV1)
 		r.Post("/", handlers.AddNoteV1)
 		r.Get("/{title}", handlers.FetchNoteV1)
-		// r.Put("/{title}", handlers.UpdateNoteV1)
+		r.Put("/{title}", handlers.UpdateNoteV1)
 		// r.Delete("/{title}", handlers.DeleteNoteV1)
 	})
 }
