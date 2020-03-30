@@ -1,4 +1,4 @@
-package handlers
+package hv1
 
 import (
 	"net/http"
@@ -9,8 +9,8 @@ import (
 	"github.com/zishone/go-notes-service/internal/platform/helpers"
 )
 
-// FetchNotesV1 : Handles GET /v1/notes call
-func FetchNotesV1(w http.ResponseWriter, r *http.Request) {
+// FetchNotes : Handles GET /v1/notes call
+func FetchNotes(w http.ResponseWriter, r *http.Request) {
 	errs := []error{}
 
 	notes, fails, err := notes.FetchNotes()
@@ -21,8 +21,8 @@ func FetchNotesV1(w http.ResponseWriter, r *http.Request) {
 	helpers.NewResponse(notes, fails, errs).WithMeta(len(notes)).Send(w)
 }
 
-// AddNoteV1 : Handles POST /v1/notes call
-func AddNoteV1(w http.ResponseWriter, r *http.Request) {
+// AddNote : Handles POST /v1/notes call
+func AddNote(w http.ResponseWriter, r *http.Request) {
 	errs := []error{}
 	note := notes.Note{}
 	jsoniter.NewDecoder(r.Body).Decode(&note)
@@ -35,8 +35,8 @@ func AddNoteV1(w http.ResponseWriter, r *http.Request) {
 	helpers.NewResponse(note, fails, errs).Send(w)
 }
 
-// FetchNoteV1 : Handles GET /v1/notes/{title} call
-func FetchNoteV1(w http.ResponseWriter, r *http.Request) {
+// FetchNote : Handles GET /v1/notes/{title} call
+func FetchNote(w http.ResponseWriter, r *http.Request) {
 	errs := []error{}
 	title := chi.URLParam(r, "title")
 
@@ -48,8 +48,8 @@ func FetchNoteV1(w http.ResponseWriter, r *http.Request) {
 	helpers.NewResponse(note, fails, errs).Send(w)
 }
 
-// UpdateNoteV1 : Handles PUT /v1/notes/{title} call
-func UpdateNoteV1(w http.ResponseWriter, r *http.Request) {
+// UpdateNote : Handles PUT /v1/notes/{title} call
+func UpdateNote(w http.ResponseWriter, r *http.Request) {
 	errs := []error{}
 	title := chi.URLParam(r, "title")
 	note := notes.Note{}
@@ -63,8 +63,8 @@ func UpdateNoteV1(w http.ResponseWriter, r *http.Request) {
 	helpers.NewResponse(note, fails, errs).Send(w)
 }
 
-// DeleteNoteV1 : Handles DELETE /v1/notes/{title} call
-func DeleteNoteV1(w http.ResponseWriter, r *http.Request) {
+// DeleteNote : Handles DELETE /v1/notes/{title} call
+func DeleteNote(w http.ResponseWriter, r *http.Request) {
 	errs := []error{}
 	title := chi.URLParam(r, "title")
 

@@ -8,13 +8,17 @@ import (
 	"github.com/go-chi/chi/middleware"
 )
 
-// Router : A struct that will hold the mux
-type Router struct {
+type router struct {
 	mux *chi.Mux
 }
 
-// ComposeMiddlewares : Composes global middlewares
-func (r *Router) ComposeMiddlewares() {
+func (r *router) configureRoutes() {
+	r.mux.Route("/api", func(r chi.Router) {
+		r.Route("/v1", rv1)
+	})
+}
+
+func (r *router) composeMiddlewares() {
 	r.mux.Use(
 		middleware.RequestID,
 		middleware.RealIP,
@@ -23,15 +27,7 @@ func (r *Router) ComposeMiddlewares() {
 	)
 }
 
-// ConfigureRoutes : Configure api routes
-func (r *Router) ConfigureRoutes() {
-	r.mux.Route("/api", func(r chi.Router) {
-		r.Route("/v1", v1)
-	})
-}
-
-// WalkRoutes : Walk and print out all routes
-func (r *Router) WalkRoutes() error {
+func (r *router) walkRoutes() error {
 	err := chi.Walk(r.mux, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
 		log.Printf("%s %s\n", method, route)
 		return nil
@@ -44,10 +40,10 @@ func (r *Router) WalkRoutes() error {
 
 // New : Instantiates the router
 func New() (*chi.Mux, error) {
-	r := Router{mux: chi.NewRouter()}
-	r.ComposeMiddlewares()
-	r.ConfigureRoutes()
-	if err := r.WalkRoutes(); err != nil {
+	r := router{mux: chi.NewRouter()}
+	r.composeMiddlewares()
+	r.configureRoutes()
+	if err := r.walkRoutes(); err != nil {
 		return nil, err
 	}
 	return r.mux, nil

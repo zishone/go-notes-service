@@ -9,10 +9,10 @@ import (
 // Response : Represents a response object
 type Response struct {
 	statusCode int
-	Status     string      `json:"status"`
-	Meta       interface{} `json:"meta"`
-	Data       interface{} `json:"data"`
-	Errors     []error     `json:"errors"`
+	Status     string        `json:"status"`
+	Meta       interface{}   `json:"meta"`
+	Data       interface{}   `json:"data"`
+	Errors     []interface{} `json:"errors"`
 }
 
 // WithMeta : Adds meta
@@ -31,8 +31,8 @@ func (r *Response) WithStatusCode(statusCode int) *Response {
 func (r *Response) Send(w http.ResponseWriter) {
 	bs, err := jsoniter.Marshal(r)
 	if err != nil {
-		r.Errors = append(r.Errors, err)
-		ErrorResponse(r.Errors).Send(w)
+		r.statusCode = 500
+		bs = []byte(err.Error())
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -61,11 +61,11 @@ func FailResponse(fails interface{}) *Response {
 }
 
 // ErrorResponse : Creates error response
-func ErrorResponse(errors []error) *Response {
+func ErrorResponse(errs []error) *Response {
 	r := Response{
 		statusCode: 500,
 		Status:     "error",
-		Errors:     errors,
+		Errors:     MakeMarshalableErrors(errs),
 	}
 	return &r
 }
