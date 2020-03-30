@@ -2,21 +2,22 @@ package helpers
 
 import (
 	"net/http"
-	"strings"
+
+	jsoniter "github.com/json-iterator/go"
 )
 
 // Response : Represents a response object
 type Response struct {
 	statusCode int
-	status     string
-	meta       string
-	data       string
-	errors     []string
+	Status     string      `json:"status"`
+	Meta       interface{} `json:"meta"`
+	Data       interface{} `json:"data"`
+	Errors     []string    `json:"errors"`
 }
 
 // WithMeta : Adds meta
-func (r *Response) WithMeta(meta string) *Response {
-	r.meta = meta
+func (r *Response) WithMeta(meta interface{}) *Response {
+	r.Meta = meta
 	return r
 }
 
@@ -28,31 +29,35 @@ func (r *Response) WithStatusCode(statusCode int) *Response {
 
 // Send : Sends response
 func (r *Response) Send(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "application/json")
-	if len(r.errors) != 0 && r.status != "error" {
-		Error(r.errors).Send(w)
+	bs, err := jsoniter.Marshal(r)
+	if err != nil {
+		r.Errors = append(r.Errors, err.Error())
+	}
+	if len(r.Errors) != 0 && r.Status != "error" {
+		Error(r.Errors).Send(w)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.statusCode)
-	w.Write([]byte("{\"status\":\"" + r.status + "\",\"data\":" + r.data + ",\"errors\":[" + strings.Join(r.errors, ",") + "],\"meta\":" + r.meta + "}"))
+	w.Write(bs)
 }
 
 // Success : Creates success response
-func Success(data string) *Response {
+func Success(data interface{}) *Response {
 	r := Response{
 		statusCode: 200,
-		status:     "success",
-		data:       data,
+		Status:     "success",
+		Data:       data,
 	}
 	return &r
 }
 
 // Fail : Creates fail response
-func Fail(data string) *Response {
+func Fail(data interface{}) *Response {
 	r := Response{
 		statusCode: 400,
-		status:     "fail",
-		data:       data,
+		Status:     "fail",
+		Data:       data,
 	}
 	return &r
 }
@@ -61,8 +66,8 @@ func Fail(data string) *Response {
 func Error(errors []string) *Response {
 	r := Response{
 		statusCode: 500,
-		status:     "error",
-		errors:     errors,
+		Status:     "error",
+		Errors:     errors,
 	}
 	return &r
 }

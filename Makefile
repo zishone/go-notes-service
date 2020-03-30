@@ -4,21 +4,21 @@ build:
 	docker build . \
 		-t go-notes-service
 
-up:
+run:
 	make build && \
 	docker run \
   	--name go-notes-service \
 		-p 3000:3000 \
 		-d \
 		go-notes-service && \
-	make log
+	make logs
 
-log:
+logs:
 	docker logs -f go-notes-service
 
-down:
+stop:
 	docker stop go-notes-service
 
 clean:
-	make down && \
+	make stop && \
 	docker rm -f go-notes-service

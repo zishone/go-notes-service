@@ -1,6 +1,22 @@
 package notes
 
+import (
+	"fmt"
+)
+
+var notes = Notes{
+	Note{
+		Title: "First",
+		Body:  "Hello, World!",
+	},
+	Note{
+		Title: "Second",
+		Body:  "Sup, Pinas!",
+	},
+}
+
 // FetchNotes : Returns list of notes
-func FetchNotes() (string, error) {
-	return "[{\"note\":\"Hello, World!\"}]", nil
+func FetchNotes() (Notes, error) {
+	fmt.Println(notes)
+	return notes, nil
 }
