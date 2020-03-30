@@ -8,8 +8,8 @@ import (
 	"github.com/zishone/go-notes-service/internal/platform/helpers"
 )
 
-// FetchNotes : Handles GET /notes call
-func FetchNotes(w http.ResponseWriter, r *http.Request) {
+// FetchNotesV1 : Handles GET /v1/notes call
+func FetchNotesV1(w http.ResponseWriter, r *http.Request) {
 	errs := []error{}
 
 	notes, fails, err := notes.FetchNotes()
@@ -20,8 +20,8 @@ func FetchNotes(w http.ResponseWriter, r *http.Request) {
 	helpers.NewResponse(notes, fails, errs).WithMeta(len(notes)).Send(w)
 }
 
-// AddNote : Handles POST /notes call
-func AddNote(w http.ResponseWriter, r *http.Request) {
+// AddNoteV1 : Handles POST /v1/notes call
+func AddNoteV1(w http.ResponseWriter, r *http.Request) {
 	errs := []error{}
 	note := notes.Note{}
 	jsoniter.NewDecoder(r.Body).Decode(&note)

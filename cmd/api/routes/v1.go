@@ -7,9 +7,9 @@ import (
 
 func v1(r chi.Router) {
 	r.Route("/notes", func(r chi.Router) {
-		r.Get("/", handlers.FetchNotes)
-		r.Post("/", handlers.AddNote)
-		// r.Put("/", handlers.UpdateNote)
-		// r.Delete("/", handlers.DeleteNote)
+		r.Get("/", handlers.FetchNotesV1)
+		r.Post("/", handlers.AddNoteV1)
+		// r.Put("/", handlers.UpdateNoteV1)
+		// r.Delete("/", handlers.DeleteNoteV1)
 	})
 }
