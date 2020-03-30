@@ -4,9 +4,8 @@ import (
 	"net/http"
 
 	jsoniter "github.com/json-iterator/go"
-	"github.com/zishone/go-notes-service/internal/platform/helpers"
-
 	"github.com/zishone/go-notes-service/internal/notes"
+	"github.com/zishone/go-notes-service/internal/platform/helpers"
 )
 
 // FetchNotes : Handles GET /notes call

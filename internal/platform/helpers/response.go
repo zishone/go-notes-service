@@ -40,17 +40,6 @@ func (r *Response) Send(w http.ResponseWriter) {
 	w.Write(bs)
 }
 
-// NewResponse : Creates a response based on the given arguments
-func NewResponse(data interface{}, fails Fails, errs []error) *Response {
-	if len(errs) != 0 {
-		return ErrorResponse(errs)
-	}
-	if len(fails) != 0 {
-		return FailResponse(fails)
-	}
-	return SuccessResponse(data)
-}
-
 // SuccessResponse : Creates success response
 func SuccessResponse(data interface{}) *Response {
 	r := Response{
@@ -79,4 +68,15 @@ func ErrorResponse(errors []error) *Response {
 		Errors:     errors,
 	}
 	return &r
+}
+
+// NewResponse : Creates a response based on the given arguments
+func NewResponse(data interface{}, fails Fails, errs []error) *Response {
+	if len(errs) != 0 {
+		return ErrorResponse(errs)
+	}
+	if len(fails) != 0 {
+		return FailResponse(fails)
+	}
+	return SuccessResponse(data)
 }
