@@ -18,11 +18,11 @@ func FetchNotes(w http.ResponseWriter, r *http.Request) {
 		errs = append(errs, err)
 	}
 
-	if len(fails) != 0 {
-		helpers.FailResponse(fails).Send(w)
-	}
 	if len(errs) != 0 {
 		helpers.ErrorResponse(errs).Send(w)
+	}
+	if len(fails) != 0 {
+		helpers.FailResponse(fails).Send(w)
 	}
 	helpers.SuccessResponse(notes).WithMeta(len(notes)).Send(w)
 }
@@ -38,11 +38,11 @@ func AddNote(w http.ResponseWriter, r *http.Request) {
 		errs = append(errs, err)
 	}
 
-	if len(fails) != 0 {
-		helpers.FailResponse(fails).Send(w)
-	}
 	if len(errs) != 0 {
 		helpers.ErrorResponse(errs).Send(w)
+	}
+	if len(fails) != 0 {
+		helpers.FailResponse(fails).Send(w)
 	}
 	helpers.SuccessResponse(note).Send(w)
 }
