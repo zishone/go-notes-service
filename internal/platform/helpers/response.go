@@ -15,15 +15,6 @@ type Response struct {
 	Errors     []error     `json:"errors"`
 }
 
-// NewResponse : Instatiates a response
-func NewResponse(statusCode int, status string) *Response {
-	r := Response{
-		statusCode: statusCode,
-		Status:     status,
-	}
-	return &r
-}
-
 // WithMeta : Adds meta
 func (r *Response) WithMeta(meta interface{}) *Response {
 	r.Meta = meta
@@ -41,10 +32,7 @@ func (r *Response) Send(w http.ResponseWriter) {
 	bs, err := jsoniter.Marshal(r)
 	if err != nil {
 		r.Errors = append(r.Errors, err)
-	}
-
-	if len(r.Errors) != 0 && r.Status != "error" {
-		ErrorResponse(r.Errors)
+		ErrorResponse(r.Errors).Send(w)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -52,23 +40,43 @@ func (r *Response) Send(w http.ResponseWriter) {
 	w.Write(bs)
 }
 
+// NewResponse : Creates a response based on the given arguments
+func NewResponse(data interface{}, fails Fails, errs []error) *Response {
+	if len(errs) != 0 {
+		return ErrorResponse(errs)
+	}
+	if len(fails) != 0 {
+		return FailResponse(fails)
+	}
+	return SuccessResponse(data)
+}
+
 // SuccessResponse : Creates success response
 func SuccessResponse(data interface{}) *Response {
-	r := NewResponse(200, "success")
-	r.Data = data
-	return r
+	r := Response{
+		statusCode: 200,
+		Status:     "success",
+		Data:       data,
+	}
+	return &r
 }
 
 // FailResponse : Creates fail response
-func FailResponse(data interface{}) *Response {
-	r := NewResponse(400, "fail")
-	r.Data = data
-	return r
+func FailResponse(fails interface{}) *Response {
+	r := Response{
+		statusCode: 400,
+		Status:     "fail",
+		Data:       fails,
+	}
+	return &r
 }
 
 // ErrorResponse : Creates error response
 func ErrorResponse(errors []error) *Response {
-	r := NewResponse(500, "error")
-	r.Errors = errors
-	return r
+	r := Response{
+		statusCode: 500,
+		Status:     "error",
+		Errors:     errors,
+	}
+	return &r
 }
