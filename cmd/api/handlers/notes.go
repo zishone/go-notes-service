@@ -9,26 +9,34 @@ import (
 	"github.com/zishone/go-notes-service/internal/notes"
 )
 
-type sample struct {
-	Sample string `json:"sample"`
-}
-
 // FetchNotes : Handles GET /notes call
 func FetchNotes(w http.ResponseWriter, r *http.Request) {
-	n, err := notes.FetchNotes()
+	errs := []error{}
+
+	data, err := notes.FetchNotes()
 	if err != nil {
-		helpers.Error([]string{"\"Cant get data\""}).Send(w)
+		errs = append(errs, err)
 	}
-	helpers.Success(n).WithMeta(sample{Sample: "meta"}).Send(w)
+
+	if len(errs) != 0 {
+		helpers.Error(errs).Send(w)
+	}
+	helpers.Success(data).WithMeta("meta").Send(w)
 }
 
 // AddNote : Handles POST /notes call
 func AddNote(w http.ResponseWriter, r *http.Request) {
+	errs := []error{}
 	n := notes.Note{}
 	jsoniter.NewDecoder(r.Body).Decode(&n)
-	err := notes.AddNote(n)
+
+	data, err := notes.AddNote(n)
 	if err != nil {
-		helpers.Error([]string{"\"Cant add data\""}).Send(w)
+		errs = append(errs, err)
 	}
-	helpers.Success(n).WithMeta(sample{Sample: "meta"}).Send(w)
+
+	if len(errs) != 0 {
+		helpers.Error(errs).Send(w)
+	}
+	helpers.Success(data).Send(w)
 }
