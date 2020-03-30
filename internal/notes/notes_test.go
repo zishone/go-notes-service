@@ -6,8 +6,8 @@ import (
 	"github.com/zishone/go-notes-service/internal/notes"
 )
 
-func TestGetNotes(t *testing.T) {
-	_, err := notes.GetNotes()
+func TestFetchNotes(t *testing.T) {
+	_, err := notes.FetchNotes()
 	if err != nil {
 		t.Errorf("Expected error to be not nil, but got %v", err)
 	}

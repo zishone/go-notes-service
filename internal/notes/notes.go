@@ -1,6 +1,6 @@
 package notes
 
-// GetNotes : Returns list of notes
-func GetNotes() (string, error) {
+// FetchNotes : Returns list of notes
+func FetchNotes() (string, error) {
 	return "[{\"note\":\"Hello, World!\"}]", nil
 }

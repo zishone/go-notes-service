@@ -8,15 +8,13 @@ import (
 )
 
 func main() {
-	c := configurations.New()
-
 	r := routes.New()
-	r.ComposeMiddlewares()
-	r.ConfigureRoutes()
-	r.WalkRoutes()
 
-	err := http.ListenAndServe(c.Port(), r.Mux())
-	if err != nil {
+	if err := r.Init(); err != nil {
+		panic(err)
+	}
+
+	if err := http.ListenAndServe(configurations.Port(), r.Mux()); err != nil {
 		panic(err)
 	}
 }
