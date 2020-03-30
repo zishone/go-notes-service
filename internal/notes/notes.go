@@ -15,11 +15,13 @@ var notes = Notes{
 
 // FetchNotes : Returns list of notes
 func FetchNotes() (Notes, helpers.Fails, error) {
-	return notes, nil, nil
+	fails := helpers.Fails{}
+	return notes, fails, nil
 }
 
 // AddNote : Adds a note
 func AddNote(note Note) (Note, helpers.Fails, error) {
+	fails := helpers.Fails{}
 	notes = append(notes, note)
-	return note, nil, nil
+	return note, fails, nil
 }
