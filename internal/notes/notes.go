@@ -25,3 +25,18 @@ func AddNote(note Note) (Note, helpers.Fails, error) {
 	notes = append(notes, note)
 	return note, fails, nil
 }
+
+// FetchNote : Return a note given title
+func FetchNote(title string) (Note, helpers.Fails, error) {
+	fails := helpers.Fails{}
+	for _, note := range notes {
+		if note.Title == title {
+			return note, fails, nil
+		}
+	}
+	fails = append(fails, helpers.Fail{
+		Code:    "NOT_FOUND",
+		Message: "Note was not found.",
+	})
+	return Note{}, fails, nil
+}
