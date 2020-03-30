@@ -8,13 +8,12 @@ import (
 )
 
 func main() {
-	r := routes.New()
-
-	if err := r.Init(); err != nil {
+	r, err := routes.New()
+	if err != nil {
 		panic(err)
 	}
 
-	if err := http.ListenAndServe(configurations.Port(), r.Mux()); err != nil {
+	if err := http.ListenAndServe(configurations.Port(), r); err != nil {
 		panic(err)
 	}
 }

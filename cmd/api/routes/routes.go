@@ -13,18 +13,6 @@ type Router struct {
 	mux *chi.Mux
 }
 
-// New : Instantiates the router
-func New() *Router {
-	return &Router{
-		mux: chi.NewRouter(),
-	}
-}
-
-// Mux : Getter for mux
-func (r *Router) Mux() *chi.Mux {
-	return r.mux
-}
-
 // ComposeMiddlewares : Composes global middlewares
 func (r *Router) ComposeMiddlewares() {
 	r.mux.Use(
@@ -54,13 +42,13 @@ func (r *Router) WalkRoutes() error {
 	return nil
 }
 
-// Init : Initializes the router
-func (r *Router) Init() error {
+// New : Instantiates the router
+func New() (*chi.Mux, error) {
+	r := Router{mux: chi.NewRouter()}
 	r.ComposeMiddlewares()
 	r.ConfigureRoutes()
-	err := r.WalkRoutes()
-	if err != nil {
-		return err
+	if err := r.WalkRoutes(); err != nil {
+		return nil, err
 	}
-	return nil
+	return r.mux, nil
 }

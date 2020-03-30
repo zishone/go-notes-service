@@ -1,9 +1,5 @@
 package notes
 
-import (
-	"fmt"
-)
-
 var notes = Notes{
 	Note{
 		Title: "First",
@@ -17,6 +13,5 @@ var notes = Notes{
 
 // FetchNotes : Returns list of notes
 func FetchNotes() (Notes, error) {
-	fmt.Println(notes)
 	return notes, nil
 }
