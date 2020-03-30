@@ -13,15 +13,18 @@ import (
 func FetchNotes(w http.ResponseWriter, r *http.Request) {
 	errs := []error{}
 
-	data, err := notes.FetchNotes()
+	data, fails, err := notes.FetchNotes()
 	if err != nil {
 		errs = append(errs, err)
 	}
 
-	if len(errs) != 0 {
-		helpers.Error(errs).Send(w)
+	if len(fails) != 0 {
+		helpers.FailResponse(fails).Send(w)
 	}
-	helpers.Success(data).WithMeta("meta").Send(w)
+	if len(errs) != 0 {
+		helpers.ErrorResponse(errs).Send(w)
+	}
+	helpers.SuccessResponse(data).WithMeta("meta").Send(w)
 }
 
 // AddNote : Handles POST /notes call
@@ -30,13 +33,16 @@ func AddNote(w http.ResponseWriter, r *http.Request) {
 	n := notes.Note{}
 	jsoniter.NewDecoder(r.Body).Decode(&n)
 
-	data, err := notes.AddNote(n)
+	data, fails, err := notes.AddNote(n)
 	if err != nil {
 		errs = append(errs, err)
 	}
 
-	if len(errs) != 0 {
-		helpers.Error(errs).Send(w)
+	if len(fails) != 0 {
+		helpers.FailResponse(fails).Send(w)
 	}
-	helpers.Success(data).Send(w)
+	if len(errs) != 0 {
+		helpers.ErrorResponse(errs).Send(w)
+	}
+	helpers.SuccessResponse(data).Send(w)
 }

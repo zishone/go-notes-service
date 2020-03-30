@@ -1,5 +1,7 @@
 package notes
 
+import "github.com/zishone/go-notes-service/internal/platform/helpers"
+
 var notes = Notes{
 	Note{
 		Title: "First",
@@ -12,12 +14,12 @@ var notes = Notes{
 }
 
 // FetchNotes : Returns list of notes
-func FetchNotes() (Notes, error) {
-	return notes, nil
+func FetchNotes() (Notes, helpers.Fails, error) {
+	return notes, nil, nil
 }
 
 // AddNote : Adds a note
-func AddNote(note Note) (Note, error) {
+func AddNote(note Note) (Note, helpers.Fails, error) {
 	notes = append(notes, note)
-	return note, nil
+	return note, nil, nil
 }

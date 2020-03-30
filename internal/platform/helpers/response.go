@@ -15,8 +15,8 @@ type Response struct {
 	Errors     []error     `json:"errors"`
 }
 
-// New : Instatiates a response
-func New(statusCode int, status string) *Response {
+// NewResponse : Instatiates a response
+func NewResponse(statusCode int, status string) *Response {
 	r := Response{
 		statusCode: statusCode,
 		Status:     status,
@@ -44,7 +44,7 @@ func (r *Response) Send(w http.ResponseWriter) {
 	}
 
 	if len(r.Errors) != 0 && r.Status != "error" {
-		Error(r.Errors)
+		ErrorResponse(r.Errors)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -52,23 +52,23 @@ func (r *Response) Send(w http.ResponseWriter) {
 	w.Write(bs)
 }
 
-// Success : Creates success response
-func Success(data interface{}) *Response {
-	r := New(200, "success")
+// SuccessResponse : Creates success response
+func SuccessResponse(data interface{}) *Response {
+	r := NewResponse(200, "success")
 	r.Data = data
 	return r
 }
 
-// Fail : Creates fail response
-func Fail(data interface{}) *Response {
-	r := New(400, "fail")
+// FailResponse : Creates fail response
+func FailResponse(data interface{}) *Response {
+	r := NewResponse(400, "fail")
 	r.Data = data
 	return r
 }
 
-// Error : Creates error response
-func Error(errors []error) *Response {
-	r := New(500, "error")
+// ErrorResponse : Creates error response
+func ErrorResponse(errors []error) *Response {
+	r := NewResponse(500, "error")
 	r.Errors = errors
 	return r
 }
