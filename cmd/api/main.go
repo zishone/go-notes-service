@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	r, err := routes.New()
+	r, err := routes.NewRouter()
 	if err != nil {
 		panic(err)
 	}

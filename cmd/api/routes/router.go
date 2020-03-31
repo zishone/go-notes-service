@@ -38,8 +38,8 @@ func (r *router) walkRoutes() error {
 	return nil
 }
 
-// New : Instantiates the router
-func New() (*chi.Mux, error) {
+// NewRouter : Instantiates a new router
+func NewRouter() (*chi.Mux, error) {
 	r := router{mux: chi.NewRouter()}
 	r.composeMiddlewares()
 	r.configureRoutes()
