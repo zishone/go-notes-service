@@ -9,14 +9,14 @@ import (
 // Response : Represents a response object
 type Response struct {
 	statusCode int
-	Status     string        `json:"status"`
-	Meta       interface{}   `json:"meta"`
-	Data       interface{}   `json:"data"`
-	Errors     []interface{} `json:"errors"`
+	Status     string      `json:"status"`
+	Meta       interface{} `json:"meta"`
+	Data       interface{} `json:"data"`
+	Errors     Merrors     `json:"errors"`
 }
 
-// WithMeta : Adds meta
-func (r *Response) WithMeta(meta interface{}) *Response {
+// WithResponseMeta : Adds meta to response
+func (r *Response) WithResponseMeta(meta interface{}) *Response {
 	r.Meta = meta
 	return r
 }
@@ -65,7 +65,7 @@ func ErrorResponse(errs []error) *Response {
 	r := Response{
 		statusCode: 500,
 		Status:     "error",
-		Errors:     MakeMarshalableErrors(errs),
+		Errors:     NewMerrorsFromErrors(errs),
 	}
 	return &r
 }

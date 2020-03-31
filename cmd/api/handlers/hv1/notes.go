@@ -18,7 +18,7 @@ func FetchNotes(w http.ResponseWriter, r *http.Request) {
 		errs = append(errs, err)
 	}
 
-	helpers.NewResponse(notes, fails, errs).WithMeta(len(notes)).Send(w)
+	helpers.NewResponse(notes, fails, errs).WithResponseMeta(len(notes)).Send(w)
 }
 
 // AddNote : Handles POST /v1/notes call
